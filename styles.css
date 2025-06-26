@@ -1,0 +1,336 @@
+.navbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 5rem;
+    width: 100%;
+    position: relative;
+    z-index: 10;
+}
+.nav {
+    background-color: transparent;
+    padding: 0.3em;
+    border: #ffffff solid 1px;
+    text-align: center;
+    font-size: 1.1em;
+    font-family: 'Courier New', Courier, monospace;
+    height: 1.6em;
+    width: 95vw;
+    max-width: 320px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    box-shadow: 0px 0px 8px rgba(255,255,255,0.3);
+    transition: background-color 0.3s ease, width 0.9s ease-in-out,
+                border 0.5s ease-in-out,transform 0.2s ease-in-out;
+
+}
+
+.nav:hover {
+    border-radius: 62px;
+    border: #ffffff solid;
+    border-width: 0.00001em;
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: scale(1.05);
+    
+}
+a.active {
+    color: white;
+    text-decoration: none;;
+    transition: font-weight 0.5s ease, color 0.3s ease, font-size 0.6s ease,width 0.5s ease-in-out;
+}
+
+a.active:hover {
+    color: #f0f0f0;
+    text-shadow: #ffffff 0px 0px 8px;
+    font-weight:  bold;
+    font-size: 1.2rem;
+
+}
+
+ul.navul {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+
+}
+
+li.navli {
+    display: inline;
+    text-align: center;
+    list-style-type: none;
+    margin-right: 28px;
+
+}
+
+.home-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 10;
+}
+
+
+h1.Welcome {
+    color: white;
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12vw;
+    margin-top: 4vh;
+    margin-bottom: 0em;
+    text-shadow: 0px 0px 12px rgba(255, 255, 255, 0.5);
+}
+
+p.tomy {
+    color: white;
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 4vw;
+    margin-top: -0.5em;
+    text-shadow: 0px 0px 12px rgba(255, 255, 255, 0.5);
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 1%;
+}
+
+.btn {
+    background-color: transparent;
+    color: white;
+    border: 1px solid #ffffff;
+    padding: 0.5em 1.5em;
+    font-size: 1.2vw;
+    font-family: 'Courier New', Courier, monospace;
+    border-radius: 30px;
+    cursor: pointer;
+    margin: 0.5em;
+    margin-top: 1em;
+    transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+}
+
+.btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: scale(1.05);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: #0a0a0a;
+    overflow-x: hidden;
+}
+
+.container {
+    width: 100vw;
+    min-height: 100vh;
+    background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #0a0a0a 100%);
+    position: relative;
+    cursor: none;
+}
+
+.grid-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 1;
+    z-index: 1;
+}
+
+.custom-cursor {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.8) 30%, rgba(255, 255, 255, 0.4) 60%, transparent 100%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 100;
+    box-shadow: 
+        0 0 25px rgba(255, 255, 255, 0.9),
+        0 0 50px rgba(255, 255, 255, 0.6),
+        0 0 75px rgba(255, 255, 255, 0.4);
+}
+
+.custom-cursor::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 50%;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 1);
+}
+
+/* Hide custom cursor on mobile devices */
+@media (max-width: 768px) {
+    .custom-cursor {
+        display: none;
+    }
+    
+    .container {
+        cursor: auto;
+    }
+}
+
+h1 {
+    color: white;
+    text-align: center;
+}
+h2 {
+    color: white;
+    text-align: left;
+}
+h3 {
+    color: white;
+    text-align: left;
+}
+p {
+    color: white;
+    text-align: left;
+}
+
+section {
+    position: relative;
+    z-index: 10;
+}
+
+header {
+    position: relative;
+    z-index: 10;
+}
+
+footer {
+    position: relative;
+    z-index: 10;
+}
+
+.Welcome, .tomy {
+    font-size: 0;
+}
+
+.Welcome .letter {
+    font-size: 13vw;
+    letter-spacing: 0;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: inherit;
+    text-align: center;
+}
+
+.tomy .letter {
+    font-size: 4vw;
+    letter-spacing: 0;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: inherit;
+    text-align: center;
+}
+
+.letter {
+    display: inline-block;
+    transition: transform 0.3s ease, color 0.3s ease, text-shadow 0.3s ease;
+    cursor: pointer;
+    margin-right: -0.5em;
+}
+
+.letter:hover {
+    transform: translateY(-10px) scale(1.2);
+    color: #00ffff;
+    text-shadow: 0px 0px 20px rgba(0, 255, 255, 0.8);
+}
+
+@media (max-width: 600px) {
+    .Welcome .letter {
+        font-size: 14vw;
+        margin-top: -5em;
+    }
+    .tomy .letter {
+        font-size: 5.5vw;
+    }
+    .btn {
+        font-size: 3.5vw;
+        padding: 0.5em 1em;
+        margin-top: 3cqmax;
+    }
+    .navbar {
+        width: 80vw;
+        max-width: 340px;
+        margin: 0 auto;
+        padding: 0;
+        height: 4rem;
+    }
+    .nav {
+        width: 100%;
+        max-width: 320px;
+        margin: 0 auto;
+        font-size: 1em;
+        border-radius: 20px;
+        box-shadow: 0px 0px 8px rgba(255,255,255,0.3);
+        padding: 0.1em;
+    }
+    .navul {
+        font-size: 1em;
+    }
+    .navli {
+        margin-right: 12px;
+    }
+    .home-content {
+        margin-top: 2rem;
+        padding-top: 0;
+        text-align: center;
+        display: block;
+        min-height: unset !important;
+        height: auto !important;
+    }
+    .Welcome {
+        margin-top: 0;
+        text-align: center;
+        margin-bottom: 0.5em;
+    }
+    .tomy {
+        text-align: center;
+        margin-bottom: 1em;
+    }
+    section {
+        padding: 0.5em 0.2em;
+    }
+}
+
+.new-typing {
+    font-size: 2.2rem;
+}
+@media (max-width: 600px) {
+    .new-typing {
+        font-size: 7vw;
+    }
+}
+
+.blinking-cursor {
+    display: inline-block;
+    font-weight: bold;
+    color: #00ffff;
+    animation: blink 1s steps(1) infinite;
+    font-size: inherit;
+    margin-left: 2px;
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
