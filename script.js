@@ -184,5 +184,19 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+    
+    // Add CV download functionality
+    const downloadCVButton = document.getElementById('downloadCV');
+    if (downloadCVButton) {
+        downloadCVButton.addEventListener('click', () => {
+            const link = document.createElement('a');
+            link.href = 'assets/Akilan Tharmikan CV.pdf';
+            link.download = 'Akilan_Tharmikan_CV.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    }
+    
     new ExpansionBentGrid();
 });

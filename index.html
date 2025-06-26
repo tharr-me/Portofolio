@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tharr-me Portofolio</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="script.js"></script>
 </head>
 <body>
@@ -17,9 +18,9 @@
             <div class="navbar">
                 <div class="nav">
                 <ul class="navul">
-                    <li class="navli"><a class="active" href="#home">Home</a></li>
-                    <li class="navli"><a class="active" href="#projects">Projects</a></li>
-                    <li class="navli"><a class="active" href="#contact">Contact</a></li>
+                    <li class="navli"><a class="active" href="#home"><i class="fas fa-home"></i></a></li>
+                    <li class="navli"><a class="active" href="#projects"><i class="fas fa-code"></i></a></li>
+                    <li class="navli"><a class="active" href="#contact"><i class="fas fa-envelope"></i></a></li>
                 </ul>
                 </div>      
             </div>
@@ -29,13 +30,149 @@
            <div class="home-content">
                     <h1 class="Welcome"><span id="welcome-typing"></span><span id="typing-cursor" class="blinking-cursor">|</span></h1>
                     <p class="tomy"><span id="portfolio-typing"></span></p>
+                    <p class="brief">I'm Tharmikan studying at the University of Sri Lanka Institute of Information Technology, studying Software Engineering. I'm a passionate developer and I'm always looking for new challenges and opportunities to learn.</p>
                     <div class="button-container">
-                        <button id="downloadCV" class="btn">Download CV</button>
-                        <button id="viewProjects" class="btn">View Projects</button>
+                        <button id="downloadCV" class="btn"><i class="fas fa-download"></i> Download CV</button>
+                        <button id="viewProjects" class="btn"><i class="fas fa-eye"></i> View Projects</button>
                     </div>
                 </div>
             </section>
 
+        <section id="skills">
+            <div class="skills-content">
+                <h2 class="section-title">Skills & Technologies</h2>
+                <div class="skills-grid">
+                    <div class="skill-category">
+                        <h3><i class="fas fa-laptop-code"></i> Programming Languages</h3>
+                        <div class="skill-items">
+                            <span class="skill-item"><i class="fab fa-python"></i> Python</span>
+                            <span class="skill-item"><i class="fab fa-js-square"></i> JavaScript</span>
+                            <span class="skill-item"><i class="fab fa-html5"></i> HTML5</span>
+                            <span class="skill-item"><i class="fab fa-css3-alt"></i> CSS3</span>
+                            <span class="skill-item"><i class="fas fa-terminal"></i> Shell Scripting</span>
+                        </div>
+                    </div>
+                    <div class="skill-category">
+                        <h3><i class="fas fa-tools"></i> Development Tools</h3>
+                        <div class="skill-items">
+                            <span class="skill-item"><i class="fab fa-github"></i> Git & GitHub</span>
+                            <span class="skill-item"><i class="fas fa-plug"></i> API Development</span>
+                            <span class="skill-item"><i class="fas fa-video"></i> Video Processing</span>
+                            <span class="skill-item"><i class="fas fa-globe"></i> Web Development</span>
+                            <span class="skill-item"><i class="fas fa-robot"></i> Automation</span>
+                        </div>
+                    </div>
+                    <div class="skill-category">
+                        <h3><i class="fas fa-server"></i> Technologies & Platforms</h3>
+                        <div class="skill-items">
+                            <span class="skill-item"><i class="fab fa-youtube"></i> YouTube API</span>
+                            <span class="skill-item"><i class="fas fa-exchange-alt"></i> REST APIs</span>
+                            <span class="skill-item"><i class="fas fa-mobile-alt"></i> Custom ROMs</span>
+                            <span class="skill-item"><i class="fas fa-palette"></i> Content Creation</span>
+                            <span class="skill-item"><i class="fab fa-linux"></i> Linux</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects">
+            <div class="projects-content">
+                <h2 class="section-title">Featured Projects</h2>
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <div class="project-image">
+                            <div class="project-placeholder"><i class="fas fa-video"></i></div>
+                        </div>
+                        <div class="project-info">
+                            <h3><i class="fas fa-video"></i> VideoProcessor</h3>
+                            <p>A Python-based video processing tool that automates downloading, splitting, and combining YouTube videos for creating short-form content. Features automated video manipulation and content creation workflows.</p>
+                            <div class="project-tech">
+                                <span class="tech-tag"><i class="fab fa-python"></i> Python</span>
+                                <span class="tech-tag"><i class="fab fa-youtube"></i> YouTube API</span>
+                                <span class="tech-tag"><i class="fas fa-cogs"></i> Video Processing</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/tharr-me/VideoProcessor" class="project-link" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-image">
+                            <div class="project-placeholder"><i class="fas fa-tshirt"></i></div>
+                        </div>
+                        <div class="project-info">
+                            <h3><i class="fas fa-tshirt"></i> ClothSwap</h3>
+                            <p>A clothing exchange platform that enables users to swap clothes with others. Built with modern web technologies and user-friendly interface.</p>
+                            <div class="project-tech">
+                                <span class="tech-tag"><i class="fab fa-python"></i> Python</span>
+                                <span class="tech-tag"><i class="fas fa-globe"></i> Web Development</span>
+                                <span class="tech-tag"><i class="fas fa-users"></i> User Interface</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/tharr-me/ClothSwap" class="project-link" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-image">
+                            <div class="project-placeholder"><i class="fas fa-exchange-alt"></i></div>
+                        </div>
+                        <div class="project-info">
+                            <h3><i class="fas fa-exchange-alt"></i> SwapApi</h3>
+                            <p>A RESTful API service for managing swap transactions and user interactions. Provides backend functionality for exchange platforms.</p>
+                            <div class="project-tech">
+                                <span class="tech-tag"><i class="fab fa-python"></i> Python</span>
+                                <span class="tech-tag"><i class="fas fa-plug"></i> API Development</span>
+                                <span class="tech-tag"><i class="fas fa-code"></i> REST</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/tharr-me/SwapApi" class="project-link" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-image">
+                            <div class="project-placeholder"><i class="fas fa-mobile-alt"></i></div>
+                        </div>
+                        <div class="project-info">
+                            <h3><i class="fas fa-mobile-alt"></i> Custom ROM Builder</h3>
+                            <p>A comprehensive tool for building custom Android ROMs for Samsung Galaxy devices with SDM439/SDM450 chipsets. Features automated build processes and device optimization.</p>
+                            <div class="project-tech">
+                                <span class="tech-tag"><i class="fas fa-terminal"></i> Shell Scripting</span>
+                                <span class="tech-tag"><i class="fab fa-android"></i> Android</span>
+                                <span class="tech-tag"><i class="fas fa-cogs"></i> Automation</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/tharr-me/Custom-Rom-Builder-For-Samsung-Galaxy-SDM439-SDM450" class="project-link" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <div class="contact-content">
+                <h2 class="section-title">Get In Touch</h2>
+                <p class="contact-text">I'm always interested in new opportunities and exciting projects. Let's connect!</p>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <span class="contact-label"><i class="fas fa-envelope"></i> Email:</span>
+                        <a href="mailto:tharmikan25@icloud.com" class="contact-link">tharmikan25@icloud.com</a>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-label"><i class="fab fa-linkedin"></i> LinkedIn:</span>
+                        <a href="https://www.linkedin.com/in/tharmikan-akilan-5777a52ba" class="contact-link" target="_blank">linkedin.com/in/tharmikan-akilan-5777a52ba</a>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-label"><i class="fab fa-github"></i> GitHub:</span>
+                        <a href="https://github.com/tharr-me" class="contact-link" target="_blank">github.com/tharr-me</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
 
 </body>
 </html>

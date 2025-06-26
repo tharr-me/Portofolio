@@ -2,51 +2,114 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 5rem;
+    height: 6rem;
     width: 100%;
     position: relative;
     z-index: 10;
+    padding: 0 2em;
 }
+
 .nav {
-    background-color: transparent;
-    padding: 0.3em;
-    border: #ffffff solid 1px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+    padding: 0.8em 1.5em;
+    border: 1px solid rgba(255,255,255,0.2);
     text-align: center;
-    font-size: 1.1em;
+    font-size: 1.2em;
     font-family: 'Courier New', Courier, monospace;
-    height: 1.6em;
-    width: 95vw;
-    max-width: 320px;
+    height: 2.2em;
+    width: 90vw;
+    max-width: 300px;
     margin: 0 auto;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 20px;
+    border-radius: 25px;
     box-shadow: 
-        0px 0px 8px rgba(255,255,255,0.2),
-        0px 0px 15px rgba(255,255,255,0.1);
-    transition: background-color 0.3s ease, width 0.9s ease-in-out,
-                border 0.5s ease-in-out,transform 0.2s ease-in-out, box-shadow 0.3s ease;
+        0px 0px 15px rgba(255,255,255,0.2),
+        0px 0px 30px rgba(255,255,255,0.1);
+    transition: all 0.4s ease-in-out;
+    backdrop-filter: blur(15px);
+    position: relative;
+    overflow: hidden;
+}
 
+.nav::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transition: left 0.6s ease;
+}
+
+.nav:hover::before {
+    left: 100%;
 }
 
 .nav:hover {
-    border-radius: 62px;
-    border: #ffffff solid;
-    border-width: 0.00001em;
-    background-color: rgba(255, 255, 255, 0.1);
-    transform: scale(1.05);
+    border-radius: 30px;
+    border: 1px solid rgba(255,255,255,0.4);
+    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.08) 100%);
+    transform: scale(1.02);
     box-shadow: 
-        0px 0px 15px rgba(255,255,255,0.4),
-        0px 0px 30px rgba(255,255,255,0.2),
-        0px 0px 45px rgba(255,255,255,0.1);
+        0px 0px 25px rgba(255,255,255,0.3),
+        0px 0px 50px rgba(255,255,255,0.15);
 }
+
+ul.navul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    gap: 2em;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+li.navli {
+    display: inline;
+    text-align: center;
+    list-style-type: none;
+    margin: 0;
+}
+
 a.active {
     color: white;
     text-decoration: none;
-    transition: font-weight 0.5s ease, color 0.3s ease, font-size 0.6s ease,width 0.5s ease-in-out, text-shadow 0.3s ease;
+    transition: all 0.4s ease;
     text-shadow: 0px 0px 5px rgba(255,255,255,0.3);
     font-weight: 500;
+    font-size: 1.2rem;
+    padding: 0.8em;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+}
+
+a.active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+    border-radius: 50%;
+    transform: scale(0);
+    transition: transform 0.3s ease;
+}
+
+a.active:hover::before {
+    transform: scale(1);
 }
 
 a.active:hover {
@@ -55,25 +118,18 @@ a.active:hover {
         0px 0px 8px rgba(255,255,255,0.8),
         0px 0px 15px rgba(255,255,255,0.4);
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
+    transform: translateY(-2px);
 }
 
-ul.navul {
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-
+a.active i {
+    margin: 0;
+    transition: all 0.3s ease;
 }
 
-li.navli {
-    display: inline;
-    text-align: center;
-    list-style-type: none;
-    margin-right: 28px;
-
+a.active:hover i {
+    transform: scale(1.1) rotate(5deg);
+    text-shadow: 0px 0px 8px rgba(255,255,255,0.6);
 }
 
 .home-content {
@@ -93,7 +149,7 @@ h1.Welcome {
     text-align: center;
     font-family: 'Courier New', Courier, monospace;
     font-size: 12vw;
-    margin-top: 4vh;
+    margin-top: 2vh;
     margin-bottom: 0em;
     text-shadow: 0px 0px 12px rgba(255, 255, 255, 0.5);
 }
@@ -110,33 +166,70 @@ p.tomy {
 .button-container {
     display: flex;
     justify-content: center;
-    margin-top: 1%;
+    margin-top: 2em;
+    gap: 2em;
 }
 
 .btn {
-    background-color: transparent;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
     color: white;
-    border: 1px solid #ffffff;
-    padding: 0.5em 1.5em;
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 1em 2.5em;
     font-size: 1.2vw;
     font-family: 'Courier New', Courier, monospace;
     border-radius: 30px;
     cursor: pointer;
-    margin: 0.5em;
-    margin-top: 1em;
-    transition: background-color 0.3s ease, transform 0.2s ease-in-out, box-shadow 0.3s ease;
-    box-shadow: 0px 0px 8px rgba(255,255,255,0.2);
+    margin: 0;
+    transition: all 0.4s ease;
+    box-shadow: 
+        0px 0px 15px rgba(255,255,255,0.2),
+        0px 0px 30px rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.6s ease;
+}
+
+.btn:hover::before {
+    left: 100%;
 }
 
 .btn:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    transform: scale(1.05);
-    font-weight: bold;
-    text-shadow: 0px 0px 12px rgba(255,255,255,0.5);
+    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.08) 100%);
+    border-color: rgba(255,255,255,0.5);
+    transform: translateY(-3px) scale(1.02);
     box-shadow: 
-        0px 0px 15px rgba(255,255,255,0.4),
-        0px 0px 30px rgba(255,255,255,0.2),
-        0px 0px 45px rgba(255,255,255,0.1);
+        0px 0px 25px rgba(255,255,255,0.3),
+        0px 0px 50px rgba(255,255,255,0.2),
+        0px 8px 25px rgba(0,0,0,0.2);
+    text-shadow: 0px 0px 8px rgba(255,255,255,0.6);
+}
+
+.btn:active {
+    transform: translateY(-1px) scale(0.98);
+    transition: all 0.1s ease;
+}
+
+.btn i {
+    margin-right: 0.8em;
+    transition: all 0.3s ease;
+}
+
+.btn:hover i {
+    transform: scale(1.1) rotate(5deg);
+    text-shadow: 0px 0px 8px rgba(255,255,255,0.6);
 }
 
 body {
@@ -276,13 +369,82 @@ footer {
         margin-top: -5em;
     }
     .tomy .letter {
-        font-size: 5.5vw;
+        font-size: 5vw;
     }
     .btn {
-        font-size: 3.5vw;
-        padding: 0.5em 1em;
-        margin-top: 3cqmax;
+        font-size: 4.5vw;
+        padding: 0.8em 2em;
+        margin: 0.3em 0;
+        min-height: 55px;
+        min-width: 220px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        letter-spacing: 0.3px;
     }
+    .btn i {
+        margin-right: 0.6em;
+    }
+    
+    /* Enhanced mobile button container */
+    .button-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 1em;
+        margin-top: 2em;
+        padding: 0 1em;
+    }
+    
+    /* Mobile-specific button improvements */
+    .btn {
+        width: 100%;
+        max-width: 280px;
+        font-size: 4.2vw;
+        padding: 1em 1.5em;
+        border-radius: 25px;
+        min-height: 60px;
+        box-shadow: 
+            0px 0px 12px rgba(255,255,255,0.25),
+            0px 0px 24px rgba(255,255,255,0.15);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255,255,255,0.4);
+        font-weight: 600;
+        letter-spacing: 0.4px;
+        transition: all 0.3s ease;
+    }
+    
+    .btn:active {
+        transform: scale(0.95);
+        background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 100%);
+        box-shadow: 
+            0px 0px 8px rgba(255,255,255,0.3),
+            0px 0px 16px rgba(255,255,255,0.2);
+    }
+    
+    .btn i {
+        margin-right: 0.8em;
+        font-size: 1.1em;
+    }
+    
+    /* Touch-friendly hover effects for mobile */
+    .btn:hover {
+        transform: translateY(-2px) scale(1.02);
+        background: linear-gradient(135deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.08) 100%);
+        box-shadow: 
+            0px 0px 20px rgba(255,255,255,0.3),
+            0px 0px 40px rgba(255,255,255,0.2),
+            0px 6px 20px rgba(0,0,0,0.15);
+    }
+    
+    /* Additional mobile optimizations */
+    .btn:focus {
+        outline: none;
+        box-shadow: 
+            0px 0px 15px rgba(255,255,255,0.4),
+            0px 0px 30px rgba(255,255,255,0.3),
+            0px 0px 0px 2px rgba(255,255,255,0.6);
+    }
+    
     .navbar {
         width: 80vw;
         max-width: 340px;
@@ -352,4 +514,581 @@ footer {
 @keyframes blink {
     0%, 50% { opacity: 1; }
     51%, 100% { opacity: 0; }
+}
+
+p.brief {
+    color: white;
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.1vw;
+    line-height: 1.6;
+    margin: 3em auto;
+    max-width: 700px;
+    padding: 1.5em 2.5em;
+    text-shadow: 0px 0px 6px rgba(255,255,255,0.4);
+    background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
+    border-left: 3px solid rgba(255,255,255,0.6);
+    border-radius: 8px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+p.brief:hover {
+    background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 100%);
+    border-left-color: rgba(255,255,255,0.9);
+    text-shadow: 0px 0px 10px rgba(255,255,255,0.6);
+    transform: translateX(5px);
+}
+
+@media (max-width: 600px) {
+    .Welcome .letter {
+        font-size: 14vw;
+        margin-top: -5em;
+    }
+    .tomy .letter {
+        font-size: 5.5vw;
+    }
+    .btn {
+        font-size: 4.5vw;
+        padding: 0.8em 2em;
+        margin: 0.3em 0;
+        min-height: 55px;
+        min-width: 220px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        letter-spacing: 0.3px;
+    }
+    .btn i {
+        margin-right: 0.6em;
+    }
+    .navbar {
+        width: 80vw;
+        max-width: 340px;
+        margin: 0 auto;
+        padding: 0;
+        height: 4rem;
+    }
+    .nav {
+        width: 100%;
+        max-width: 320px;
+        margin: 0 auto;
+        font-size: 1em;
+        border-radius: 20px;
+        box-shadow: 0px 0px 8px rgba(255,255,255,0.3);
+        padding: 0.1em;
+    }
+    .navul {
+        font-size: 1em;
+    }
+    .navli {
+        margin-right: 12px;
+    }
+    .home-content {
+        margin-top: 2rem;
+        padding-top: 0;
+        text-align: center;
+        display: block;
+        min-height: unset !important;
+        height: auto !important;
+    }
+    .Welcome {
+        margin-top: 0;
+        text-align: center;
+        margin-bottom: 0.5em;
+    }
+    .tomy {
+        text-align: center;
+        margin-bottom: 1em;
+    }
+    section {
+        padding: 0.5em 0.2em;
+    }
+    p.brief {
+        font-size: 3.5vw;
+        margin: 1.2em auto;
+        padding: 1em 1.5em;
+        max-width: 85vw;
+        line-height: 1.5;
+    }
+}
+
+/* Section Titles */
+.section-title {
+    color: white;
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 3vw;
+    margin-bottom: 2em;
+    text-shadow: 
+        0px 0px 15px rgba(255,255,255,0.4),
+        0px 0px 30px rgba(255,255,255,0.2);
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+}
+
+/* Skills Section */
+.skills-content {
+    padding: 4em 3em;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2em;
+    margin-top: 2em;
+}
+
+.skill-category {
+    background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 15px;
+    padding: 2em;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.skill-category:hover {
+    background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 100%);
+    border-color: rgba(255,255,255,0.3);
+    transform: translateY(-5px);
+    box-shadow: 
+        0px 0px 20px rgba(255,255,255,0.2),
+        0px 0px 40px rgba(255,255,255,0.1);
+}
+
+.skill-category h3 {
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.6em;
+    margin-bottom: 1em;
+    text-align: center;
+    text-shadow: 0px 0px 8px rgba(255,255,255,0.4);
+}
+
+.skill-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+    justify-content: center;
+}
+
+.skill-item {
+    background: rgba(255,255,255,0.1);
+    color: white;
+    padding: 0.8em 1.2em;
+    border-radius: 20px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.95em;
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.skill-item:hover {
+    background: rgba(255,255,255,0.2);
+    border-color: rgba(255,255,255,0.4);
+    transform: scale(1.05);
+    text-shadow: 0px 0px 8px rgba(255,255,255,0.6);
+}
+
+/* Projects Section */
+.projects-content {
+    padding: 4em 3em;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 2em;
+    margin-top: 2em;
+}
+
+.project-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 15px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.project-card:hover {
+    background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 100%);
+    border-color: rgba(255,255,255,0.3);
+    transform: translateY(-8px);
+    box-shadow: 
+        0px 0px 25px rgba(255,255,255,0.2),
+        0px 0px 50px rgba(255,255,255,0.1);
+}
+
+.project-image {
+    height: 220px;
+    background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.project-placeholder {
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 3em;
+    text-shadow: 0px 0px 15px rgba(255,255,255,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+.project-card:hover .project-placeholder {
+    transform: scale(1.1);
+    text-shadow: 0px 0px 20px rgba(255,255,255,0.8);
+}
+
+.project-info {
+    padding: 2em;
+}
+
+.project-info h3 {
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.4em;
+    margin-bottom: 0.8em;
+    text-shadow: 0px 0px 8px rgba(255,255,255,0.4);
+}
+
+.project-info p {
+    color: rgba(255,255,255,0.8);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.95em;
+    line-height: 1.6;
+    margin-bottom: 1.2em;
+}
+
+.project-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8em;
+    margin-bottom: 1.2em;
+}
+
+.tech-tag {
+    background: rgba(255,255,255,0.15);
+    color: white;
+    padding: 0.5em 1em;
+    border-radius: 15px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.85em;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.project-links {
+    display: flex;
+    gap: 1.2em;
+}
+
+.project-link {
+    color: white;
+    text-decoration: none;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.95em;
+    padding: 0.7em 1.5em;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    background: rgba(255,255,255,0.05);
+}
+
+.project-link:hover {
+    background: rgba(255,255,255,0.15);
+    border-color: rgba(255,255,255,0.5);
+    text-shadow: 0px 0px 8px rgba(255,255,255,0.6);
+    transform: scale(1.05);
+}
+
+/* Contact Section */
+.contact-content {
+    padding: 4em 3em;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.contact-text {
+    color: rgba(255,255,255,0.8);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.2em;
+    margin-bottom: 2em;
+    line-height: 1.6;
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    align-items: center;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 1.5em;
+    background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 1.5em 2.5em;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    min-width: 400px;
+}
+
+.contact-item:hover {
+    background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 100%);
+    border-color: rgba(255,255,255,0.3);
+    transform: translateX(5px);
+    box-shadow: 
+        0px 0px 15px rgba(255,255,255,0.2),
+        0px 0px 30px rgba(255,255,255,0.1);
+}
+
+.contact-label {
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    min-width: 80px;
+    text-shadow: 0px 0px 6px rgba(255,255,255,0.4);
+}
+
+.contact-link {
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    font-family: 'Courier New', Courier, monospace;
+    transition: all 0.3s ease;
+}
+
+.contact-link:hover {
+    color: white;
+    text-shadow: 0px 0px 8px rgba(255,255,255,0.6);
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+    .section-title {
+        font-size: 6vw;
+        margin-bottom: 1.5em;
+    }
+    
+    .skills-content,
+    .projects-content,
+    .contact-content {
+        padding: 2em 1em;
+    }
+    
+    .skills-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5em;
+    }
+    
+    .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5em;
+    }
+    
+    .skill-category,
+    .project-card {
+        padding: 1.5em;
+    }
+    
+    .skill-item {
+        font-size: 0.8em;
+        padding: 0.4em 0.8em;
+    }
+    
+    .project-info h3 {
+        font-size: 1.1em;
+    }
+    
+    .project-info p {
+        font-size: 0.8em;
+    }
+    
+    .project-placeholder {
+        font-size: 2.5em;
+    }
+    
+    .contact-item {
+        flex-direction: column;
+        gap: 0.5em;
+        text-align: center;
+    }
+    
+    .contact-label {
+        min-width: auto;
+    }
+}
+
+/* Icon Styling */
+.navul a i,
+.btn i,
+.skill-category h3 i,
+.skill-item i,
+.project-info h3 i,
+.tech-tag i,
+.project-link i,
+.contact-label i {
+    margin-right: 0.5em;
+    transition: all 0.3s ease;
+}
+
+.navul a:hover i,
+.btn:hover i,
+.skill-item:hover i,
+.project-link:hover i,
+.contact-link:hover + .contact-label i {
+    transform: scale(1.1);
+    text-shadow: 0px 0px 8px rgba(255,255,255,0.6);
+}
+
+.project-placeholder i {
+    font-size: 2em;
+    margin-bottom: 0.5em;
+    display: block;
+    text-shadow: 0px 0px 10px rgba(255,255,255,0.5);
+}
+
+.skill-category h3 i {
+    color: rgba(255,255,255,0.8);
+    margin-right: 0.8em;
+}
+
+.skill-item i {
+    margin-right: 0.4em;
+    font-size: 0.9em;
+}
+
+.tech-tag i {
+    margin-right: 0.3em;
+    font-size: 0.8em;
+}
+
+.project-info h3 i {
+    margin-right: 0.5em;
+    color: rgba(255,255,255,0.8);
+}
+
+.contact-label i {
+    margin-right: 0.5em;
+    color: rgba(255,255,255,0.8);
+}
+
+/* Mobile icon optimizations */
+@media (max-width: 600px) {
+    .navul a i,
+    .btn i,
+    .skill-category h3 i,
+    .skill-item i,
+    .project-info h3 i,
+    .tech-tag i,
+    .project-link i,
+    .contact-label i {
+        margin-right: 0.3em;
+    }
+    
+    .project-placeholder i {
+        font-size: 1.5em;
+        margin-bottom: 0.3em;
+    }
+    
+    .skill-category h3 i {
+        margin-right: 0.5em;
+    }
+    
+    .skill-item i {
+        margin-right: 0.3em;
+        font-size: 0.8em;
+    }
+    
+    .tech-tag i {
+        margin-right: 0.2em;
+        font-size: 0.7em;
+    }
+}
+
+/* Navbar mobile optimizations */
+.navbar {
+    height: 4.5rem;
+    padding: 0 1em;
+}
+
+.nav {
+    width: 95vw;
+    max-width: 250px;
+    font-size: 1em;
+    padding: 0.6em 1.2em;
+    height: 1.8em;
+    border-radius: 20px;
+}
+
+.navul {
+    gap: 1.5em;
+}
+
+.navli {
+    margin-right: 0;
+}
+
+a.active {
+    font-size: 1.1rem;
+    padding: 0.6em;
+    width: 40px;
+    height: 40px;
+}
+
+a.active:hover {
+    font-size: 1.2rem;
+    transform: translateY(-1px);
+}
+
+a.active i {
+    margin: 0;
+}
+
+/* Extra small mobile devices */
+@media (max-width: 480px) {
+    .button-container {
+        gap: 0.8em;
+        margin-top: 1.5em;
+        padding: 0 0.5em;
+    }
+    
+    .btn {
+        font-size: 4.8vw;
+        padding: 0.9em 1.2em;
+        min-height: 55px;
+        max-width: 260px;
+        border-radius: 20px;
+    }
+    
+    .btn i {
+        margin-right: 0.6em;
+        font-size: 1em;
+    }
 }
