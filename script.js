@@ -98,12 +98,12 @@ class ExpansionBentGrid {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
         // Use a darker grid color for both modes
-        let gridColor = 'rgba(40, 40, 40, 0.7)';
+        let gridColor = 'rgba(40, 40, 40, 0.9)';
         if (document.body.classList.contains('light-mode')) {
             gridColor = 'rgba(60, 90, 120, 0.8)';
         }
         this.ctx.strokeStyle = gridColor;
-        this.ctx.lineWidth = 0.8;
+        this.ctx.lineWidth = 0.9;
 
         // Draw vertical lines with expansion effect
         for (let x = 0; x <= this.canvas.width; x += this.gridSize) {
@@ -157,16 +157,39 @@ class ExpansionBentGrid {
     }
 }
 
-function typeText(elementId, text, delay, cursor, afterType) {
+function typeTextWithCursor({
+    elementId,
+    text,
+    delay = 70,
+    cursor,
+    afterType,
+    backspace = false,
+    afterBackspace = null
+}) {
     const el = document.getElementById(elementId);
-    let i = 0;
+    let i = backspace ? text.length : 0;
     function type() {
-        if (i <= text.length) {
+        if (!backspace && i <= text.length) {
             el.textContent = text.slice(0, i);
+            // Move cursor to the end of the text node
+            if (cursor.parentNode !== el.parentNode) {
+                if (cursor.parentNode) cursor.parentNode.removeChild(cursor);
+                el.parentNode.appendChild(cursor);
+            }
             i++;
             setTimeout(type, delay);
-        } else if (afterType) {
+        } else if (backspace && i >= 0) {
+            el.textContent = text.slice(0, i);
+            if (cursor.parentNode !== el.parentNode) {
+                if (cursor.parentNode) cursor.parentNode.removeChild(cursor);
+                el.parentNode.appendChild(cursor);
+            }
+            i--;
+            setTimeout(type, delay);
+        } else if (afterType && !backspace) {
             afterType();
+        } else if (afterBackspace && backspace) {
+            afterBackspace();
         }
     }
     type();
@@ -179,14 +202,72 @@ document.addEventListener('DOMContentLoaded', () => {
     const cursor = document.getElementById('typing-cursor');
     if (welcomeTyping && portfolioTyping && cursor) {
         cursor.style.display = 'inline-block';
-        typeText('welcome-typing', 'Welcome', 120, cursor, () => {
-            // Move cursor to portfolio line
-            document.querySelector('.Welcome').removeChild(cursor);
-            document.querySelector('.tomy').appendChild(cursor);
-            typeText('portfolio-typing', 'to my portfolio', 70, cursor, () => {
-                // After typing, keep cursor at end of portfolio line
-                cursor.style.display = 'inline-block';
-            });
+        // Step 1: Type 'Welcome'
+        typeTextWithCursor({
+            elementId: 'welcome-typing',
+            text: 'Welcome',
+            delay: 120,
+            cursor,
+            afterType: () => {
+                // Step 2: Move cursor to portfolio line and type 'to my portfolio'
+                if (cursor.parentNode) cursor.parentNode.removeChild(cursor);
+                portfolioTyping.parentNode.appendChild(cursor);
+                typeTextWithCursor({
+                    elementId: 'portfolio-typing',
+                    text: 'to my portfolio',
+                    delay: 70,
+                    cursor,
+                    afterType: () => {
+                        setTimeout(() => {
+                            // Step 3: Backspace 'to my portfolio'
+                            typeTextWithCursor({
+                                elementId: 'portfolio-typing',
+                                text: 'to my portfolio',
+                                delay: 40,
+                                cursor,
+                                backspace: true,
+                                afterBackspace: () => {
+                                    // Step 4: Move cursor to Welcome and backspace 'Welcome'
+                                    if (cursor.parentNode) cursor.parentNode.removeChild(cursor);
+                                    welcomeTyping.parentNode.appendChild(cursor);
+                                    typeTextWithCursor({
+                                        elementId: 'welcome-typing',
+                                        text: 'Welcome',
+                                        delay: 40,
+                                        cursor,
+                                        backspace: true,
+                                        afterBackspace: () => {
+                                            // Step 5: Type 'Hello, World!'
+                                            typeTextWithCursor({
+                                                elementId: 'welcome-typing',
+                                                text: 'Hello World!',
+                                                delay: 70,
+                                                cursor,
+                                                afterType: () => {
+                                                    setTimeout(() => {
+                                                        // Step 6: Move cursor to portfolio line and type 'loops, logic, and learning'
+                                                        if (cursor.parentNode) cursor.parentNode.removeChild(cursor);
+                                                        portfolioTyping.parentNode.appendChild(cursor);
+                                                        typeTextWithCursor({
+                                                            elementId: 'portfolio-typing',
+                                                            text: 'loops, logic, and learning',
+                                                            delay: 70,
+                                                            cursor,
+                                                            afterType: () => {
+                                                                cursor.style.display = 'inline-block';
+                                                            }
+                                                        });
+                                                    }, 1200);
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        }, 1200);
+                    }
+                });
+            }
         });
     }
     
@@ -200,6 +281,17 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+        });
+    }
+    
+    // Add View Projects scroll functionality
+    const viewProjectsButton = document.getElementById('viewProjects');
+    if (viewProjectsButton) {
+        viewProjectsButton.addEventListener('click', () => {
+            const projectsSection = document.getElementById('projects');
+            if (projectsSection) {
+                projectsSection.scrollIntoView({ behavior: 'smooth' });
+            }
         });
     }
     
