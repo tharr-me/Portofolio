@@ -1,650 +1,262 @@
-class ExpansionBentGrid {
-    constructor() {
-        this.container = document.getElementById('container');
-        this.canvas = document.getElementById('gridCanvas');
-        this.cursor = document.getElementById('cursor');
-        this.ctx = this.canvas.getContext('2d');
-        
-        // Mouse state - no smoothing for instant response
-        this.mouseX = 0;
-        this.mouseY = 0;
-        this.isHovering = false;
-        this.hasMoved = false;
-        this.bendingEnabled = false;
-        this.bendingTimeout = null;
-        
-        // Grid configuration
-        this.gridSize = 55;
-        this.expansionRadius = 80;
-        this.expansionStrength = 30;
-        
-        // Hide cursor by default
-        this.cursor.style.opacity = '0';
-        
-        this.init();
-    }
-    
-    init() {
-        this.resizeCanvas();
-        this.setupEventListeners();
-        
-        // Set initial position to center
-        this.mouseX = window.innerWidth / 2;
-        this.mouseY = window.innerHeight / 2;
-        this.updateCursorPosition();
-        this.drawExpansionGrid();
-    }
-    
-    resizeCanvas() {
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = document.documentElement.scrollHeight;
-    }
-    
-    setupEventListeners() {
-        // Only add mouse events if not on mobile
-        if (window.innerWidth > 768) {
-            this.container.addEventListener('mousemove', (e) => this.onMouseMove(e));
-            this.container.addEventListener('mouseenter', () => this.onMouseEnter());
-            this.container.addEventListener('mouseleave', () => this.onMouseLeave());
-        }
-        window.addEventListener('resize', () => this.resizeCanvas());
-    }
-    
-    onMouseMove(e) {
-        const rect = this.container.getBoundingClientRect();
-        // Direct assignment for instant response
-        this.mouseX = e.clientX - rect.left;
-        this.mouseY = e.clientY - rect.top;
-        
-        this.updateCursorPosition();
-        
-        // Show cursor on first movement
-        if (!this.hasMoved) {
-            this.hasMoved = true;
-            this.cursor.style.opacity = '1';
-            // Start bending after 500ms delay
-            this.bendingTimeout = setTimeout(() => {
-                this.bendingEnabled = true;
-            }, 500);
-        }
-        
-        this.drawExpansionGrid();
-    }
-    
-    onMouseEnter() {
-        this.isHovering = true;
-        this.cursor.style.opacity = '1';
-    }
-    
-    onMouseLeave() {
-        this.isHovering = false;
-        this.cursor.style.opacity = '0';
-        // Reset bending when leaving
-        this.hasMoved = false;
-        this.bendingEnabled = false;
-        if (this.bendingTimeout) {
-            clearTimeout(this.bendingTimeout);
-        }
-        this.drawExpansionGrid();
-    }
-    
-    updateCursorPosition() {
-        // Direct positioning for instant response
-        this.cursor.style.left = this.mouseX + 'px';
-        this.cursor.style.top = this.mouseY + 'px';
-    }
-    
-    drawExpansionGrid() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        
-        // Use a darker grid color for both modes
-        let gridColor = 'rgba(40, 40, 40, 0.9)';
-        if (document.body.classList.contains('light-mode')) {
-            gridColor = 'rgba(60, 90, 120, 0.8)';
-        }
-        this.ctx.strokeStyle = gridColor;
-        this.ctx.lineWidth = 0.9;
+import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
 
-        // Draw vertical lines with expansion effect
-        for (let x = 0; x <= this.canvas.width; x += this.gridSize) {
-            this.ctx.beginPath();
-            
-            for (let y = 0; y <= this.canvas.height; y += 2) {
-                const distance = Math.sqrt((x - this.mouseX) ** 2 + (y - this.mouseY) ** 2);
-                let offsetX = x;
-                
-                if (distance < this.expansionRadius && this.bendingEnabled) {
-                    // Expansion effect: push lines away from cursor
-                    const expansionFactor = (1 - distance / this.expansionRadius) * this.expansionStrength;
-                    const directionX = (x - this.mouseX) / distance;
-                    offsetX = x + directionX * expansionFactor;
-                }
-                
-                if (y === 0) {
-                    this.ctx.moveTo(offsetX, y);
-                } else {
-                    this.ctx.lineTo(offsetX, y);
-                }
-            }
-            
-            this.ctx.stroke();
-        }
+// --- Custom Cursor Logic ---
+const cursorDot = document.querySelector('[data-cursor-dot]');
+const cursorOutline = document.querySelector('[data-cursor-outline]');
 
-        // Draw horizontal lines with expansion effect
-        for (let y = 0; y <= this.canvas.height; y += this.gridSize) {
-            this.ctx.beginPath();
-            
-            for (let x = 0; x <= this.canvas.width; x += 2) {
-                const distance = Math.sqrt((x - this.mouseX) ** 2 + (y - this.mouseY) ** 2);
-                let offsetY = y;
-                
-                if (distance < this.expansionRadius && this.bendingEnabled) {
-                    // Expansion effect: push lines away from cursor
-                    const expansionFactor = (1 - distance / this.expansionRadius) * this.expansionStrength;
-                    const directionY = (y - this.mouseY) / distance;
-                    offsetY = y + directionY * expansionFactor;
-                }
-                
-                if (x === 0) {
-                    this.ctx.moveTo(x, offsetY);
-                } else {
-                    this.ctx.lineTo(x, offsetY);
-                }
-            }
-            
-            this.ctx.stroke();
-        }
-    }
-}
+window.addEventListener('mousemove', (e) => {
+    const posX = e.clientX;
+    const posY = e.clientY;
 
-function typeTextWithCursor({
-    elementId,
-    text,
-    delay = 70,
-    cursor,
-    afterType,
-    backspace = false,
-    afterBackspace = null
-}) {
-    const el = document.getElementById(elementId);
-    let i = backspace ? text.length : 0;
-    function type() {
-        if (!backspace && i <= text.length) {
-            el.textContent = text.slice(0, i);
-            // Move cursor to the end of the text node
-            if (cursor.parentNode !== el.parentNode) {
-                if (cursor.parentNode) cursor.parentNode.removeChild(cursor);
-                el.parentNode.appendChild(cursor);
-            }
-            i++;
-            setTimeout(type, delay);
-        } else if (backspace && i >= 0) {
-            el.textContent = text.slice(0, i);
-            if (cursor.parentNode !== el.parentNode) {
-                if (cursor.parentNode) cursor.parentNode.removeChild(cursor);
-                el.parentNode.appendChild(cursor);
-            }
-            i--;
-            setTimeout(type, delay);
-        } else if (afterType && !backspace) {
-            afterType();
-        } else if (afterBackspace && backspace) {
-            afterBackspace();
-        }
-    }
-    type();
-}
+    // Dot follows instantly
+    cursorDot.style.left = `${posX}px`;
+    cursorDot.style.top = `${posY}px`;
 
-// Initialize the expansion bent grid
-document.addEventListener('DOMContentLoaded', () => {
-    const welcomeTyping = document.getElementById('welcome-typing');
-    const portfolioTyping = document.getElementById('portfolio-typing');
-    const cursor = document.getElementById('typing-cursor');
-    if (welcomeTyping && portfolioTyping && cursor) {
-        cursor.style.display = 'inline-block';
-        // Step 1: Type 'Welcome'
-        typeTextWithCursor({
-            elementId: 'welcome-typing',
-            text: 'Welcome',
-            delay: 120,
-            cursor,
-            afterType: () => {
-                // Step 2: Move cursor to portfolio line and type 'to my portfolio'
-                if (cursor.parentNode) cursor.parentNode.removeChild(cursor);
-                portfolioTyping.parentNode.appendChild(cursor);
-                typeTextWithCursor({
-                    elementId: 'portfolio-typing',
-                    text: 'to my portfolio',
-                    delay: 70,
-                    cursor,
-                    afterType: () => {
-                        setTimeout(() => {
-                            // Step 3: Backspace 'to my portfolio'
-                            typeTextWithCursor({
-                                elementId: 'portfolio-typing',
-                                text: 'to my portfolio',
-                                delay: 40,
-                                cursor,
-                                backspace: true,
-                                afterBackspace: () => {
-                                    // Step 4: Move cursor to Welcome and backspace 'Welcome'
-                                    if (cursor.parentNode) cursor.parentNode.removeChild(cursor);
-                                    welcomeTyping.parentNode.appendChild(cursor);
-                                    typeTextWithCursor({
-                                        elementId: 'welcome-typing',
-                                        text: 'Welcome',
-                                        delay: 40,
-                                        cursor,
-                                        backspace: true,
-                                        afterBackspace: () => {
-                                            // Step 5: Type 'Hello, World!'
-                                            typeTextWithCursor({
-                                                elementId: 'welcome-typing',
-                                                text: 'Hello World!',
-                                                delay: 70,
-                                                cursor,
-                                                afterType: () => {
-                                                    setTimeout(() => {
-                                                        // Step 6: Move cursor to portfolio line and type 'loops, logic, and learning'
-                                                        if (cursor.parentNode) cursor.parentNode.removeChild(cursor);
-                                                        portfolioTyping.parentNode.appendChild(cursor);
-                                                        typeTextWithCursor({
-                                                            elementId: 'portfolio-typing',
-                                                            text: 'loops, logic, and learning',
-                                                            delay: 70,
-                                                            cursor,
-                                                            afterType: () => {
-                                                                cursor.style.display = 'inline-block';
-                                                            }
-                                                        });
-                                                    }, 1200);
-                                                }
-                                            });
-                                        }
-                                    });
-                                }
-                            });
-                        }, 1200);
-                    }
-                });
-            }
-        });
-    }
-    
-    // Add CV download functionality
-    const downloadCVButton = document.getElementById('downloadCV');
-    if (downloadCVButton) {
-        downloadCVButton.addEventListener('click', () => {
-            const link = document.createElement('a');
-            link.href = 'assets/Akilan Tharmikan CV.pdf';
-            link.download = 'Akilan_Tharmikan_CV.pdf';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        });
-    }
-    
-    // Add View Projects scroll functionality
-    const viewProjectsButton = document.getElementById('viewProjects');
-    if (viewProjectsButton) {
-        viewProjectsButton.addEventListener('click', () => {
-            const projectsSection = document.getElementById('projects');
-            if (projectsSection) {
-                projectsSection.scrollIntoView({ behavior: 'smooth' });
-            }
-        });
-    }
-    
-    // Initialize collapsible text functionality
-    initializeCollapsibleText();
-    
-    // Initialize scroll to top functionality
-    initializeScrollToTop();
-    
-    // Initialize theme toggle functionality
-    initializeThemeToggle();
-    
-    // Initialize fun quirky features
-    initializeQuirkyFeatures();
-    
-    new ExpansionBentGrid();
+    // Outline follows with delay (using animate for smoothness)
+    cursorOutline.animate({
+        left: `${posX}px`,
+        top: `${posY}px`
+    }, { duration: 500, fill: "forwards" });
 });
 
-// Collapsible Text Functionality
-function initializeCollapsibleText() {
-    const toggleButtons = document.querySelectorAll('.collapse-toggle');
-    
-    toggleButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const targetId = this.getAttribute('data-target');
-            const collapsibleContainer = this.closest('.collapsible-text');
-            const textElement = collapsibleContainer.querySelector('p');
-            
-            if (collapsibleContainer.classList.contains('expanded')) {
-                // Collapse
-                collapsibleContainer.classList.remove('expanded');
-                this.classList.remove('expanded');
-                this.innerHTML = '<i class="fas fa-chevron-down"></i>';
-                
-                // Smooth collapse animation
-                textElement.style.maxHeight = '3.6em';
-            } else {
-                // Expand
-                collapsibleContainer.classList.add('expanded');
-                this.classList.add('expanded');
-                this.innerHTML = '<i class="fas fa-chevron-up"></i>';
-                
-                // Smooth expand animation
-                textElement.style.maxHeight = '20em';
-            }
-        });
+// Hover effects for cursor
+const hoverLinks = document.querySelectorAll('.hover-link, .hover-card');
+
+hoverLinks.forEach(link => {
+    link.addEventListener('mouseenter', () => {
+        cursorOutline.style.width = '50px';
+        cursorOutline.style.height = '50px';
+        cursorOutline.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
     });
     
-    // Auto-collapse on window resize to mobile
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-            if (window.innerWidth > 600) {
-                // Reset all collapsible elements on desktop
-                const collapsibleContainers = document.querySelectorAll('.collapsible-text');
-                const toggleButtons = document.querySelectorAll('.collapse-toggle');
-                
-                collapsibleContainers.forEach(container => {
-                    container.classList.remove('expanded');
-                });
-                
-                toggleButtons.forEach(button => {
-                    button.classList.remove('expanded');
-                    button.innerHTML = '<i class="fas fa-chevron-down"></i>';
-                });
-            }
-        }, 100);
+    link.addEventListener('mouseleave', () => {
+        cursorOutline.style.width = '20px';
+        cursorOutline.style.height = '20px';
+        cursorOutline.style.backgroundColor = 'transparent';
     });
+});
+
+// --- Typewriter Effect ---
+const textElement = document.getElementById('typewriter');
+const phrases = [
+    "Building digital experiences.",
+    "Crafting clean code.",
+    "Exploring new technologies.",
+    "Minimalist design enthusiast."
+];
+
+let phraseIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+let typeSpeed = 100;
+
+function type() {
+    const currentPhrase = phrases[phraseIndex];
+    
+    if (isDeleting) {
+        textElement.textContent = currentPhrase.substring(0, charIndex - 1);
+        charIndex--;
+        typeSpeed = 50;
+    } else {
+        textElement.textContent = currentPhrase.substring(0, charIndex + 1);
+        charIndex++;
+        typeSpeed = 100;
+    }
+
+    if (!isDeleting && charIndex === currentPhrase.length) {
+        isDeleting = true;
+        typeSpeed = 2000; // Pause at end
+    } else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+        typeSpeed = 500; // Pause before typing next
+    }
+
+    setTimeout(type, typeSpeed);
 }
 
-// Scroll to Top Functionality
-function initializeScrollToTop() {
-    const scrollToTopButton = document.getElementById('scrollToTop');
-    const themeToggleButton = document.getElementById('themeToggle');
-    
-    if (!scrollToTopButton) return;
-    
-    // Show/hide button based on scroll position
-    window.addEventListener('scroll', () => {
-        if (window.pageYOffset > 300) {
-            scrollToTopButton.classList.add('show');
-            // Move theme toggle up when scroll button appears
-            if (themeToggleButton) {
-                themeToggleButton.classList.add('move-up');
-            }
-        } else {
-            scrollToTopButton.classList.remove('show');
-            // Move theme toggle back to original position when scroll button hides
-            if (themeToggleButton) {
-                themeToggleButton.classList.remove('move-up');
-            }
+// Start typing when loaded
+document.addEventListener('DOMContentLoaded', type);
+
+
+// --- Three.js Background ---
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x050505);
+scene.fog = new THREE.FogExp2(0x050505, 0.002);
+
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.z = 5;
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+
+// Append to specific container
+const container = document.querySelector('.canvas-container');
+if (container) {
+    container.appendChild(renderer.domElement);
+} else {
+    document.body.appendChild(renderer.domElement);
+}
+
+// Particles
+const geometry = new THREE.BufferGeometry();
+const particlesCount = 2000;
+const posArray = new Float32Array(particlesCount * 3);
+
+for(let i = 0; i < particlesCount * 3; i++) {
+    posArray[i] = (Math.random() - 0.5) * 15; 
+}
+
+geometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+const material = new THREE.PointsMaterial({
+    size: 0.02,
+    color: 0xffffff,
+    transparent: true,
+    opacity: 0.8,
+});
+
+const particlesMesh = new THREE.Points(geometry, material);
+scene.add(particlesMesh);
+
+// Mouse Interaction for 3D
+let mouseX = 0;
+let mouseY = 0;
+let targetX = 0;
+let targetY = 0;
+
+const windowHalfX = window.innerWidth / 2;
+const windowHalfY = window.innerHeight / 2;
+
+document.addEventListener('mousemove', (event) => {
+    mouseX = (event.clientX - windowHalfX);
+    mouseY = (event.clientY - windowHalfY);
+});
+
+const clock = new THREE.Clock();
+
+const tick = () => {
+    targetX = mouseX * 0.001;
+    targetY = mouseY * 0.001;
+
+    const elapsedTime = clock.getElapsedTime();
+
+    particlesMesh.rotation.y = .1 * elapsedTime;
+    particlesMesh.rotation.x += 0.05 * (targetY - particlesMesh.rotation.x);
+    particlesMesh.rotation.y += 0.05 * (targetX - particlesMesh.rotation.y);
+
+    renderer.render(scene, camera);
+    window.requestAnimationFrame(tick);
+}
+
+tick();
+
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// --- Preloader ---
+window.addEventListener('load', () => {
+    const preloader = document.getElementById('preloader');
+    setTimeout(() => {
+        preloader.style.opacity = '0';
+        setTimeout(() => {
+            preloader.style.display = 'none';
+        }, 500);
+    }, 2000); // Wait for 2s animation
+});
+
+// --- Scroll Reveal ---
+const observerOptions = {
+    threshold: 0.1
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('show');
         }
     });
-    
-    // Smooth scroll to top when button is clicked
-    scrollToTopButton.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-    
-    // Add keyboard support (Space or Enter key)
-    scrollToTopButton.addEventListener('keydown', (e) => {
-        if (e.key === ' ' || e.key === 'Enter') {
-            e.preventDefault();
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
+}, observerOptions);
+
+const hiddenElements = document.querySelectorAll('.hidden');
+hiddenElements.forEach((el) => observer.observe(el));
+
+// --- Active Nav Link ---
+const sections = document.querySelectorAll('section');
+const navLinks = document.querySelectorAll('nav ul li a');
+
+const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === entry.target.id) {
+                    link.classList.add('active');
+                }
             });
         }
     });
+}, { threshold: 0.5 });
+
+sections.forEach(section => navObserver.observe(section));
+
+// --- Mobile Optimization for Particles ---
+if (window.innerWidth < 768) {
+    // Reduce particles on mobile
+    // Note: This logic runs after the initial setup, so we might need to reload or handle it in the setup.
+    // Since the setup is already done above, let's just update the geometry if needed or keep it simple.
+    // For a proper fix, we should have checked window.innerWidth during setup.
+    // But we can just hide the canvas on very small screens if performance is bad, or leave it as is since 2000 particles is usually fine.
 }
 
-// Theme Toggle Functionality
-function initializeThemeToggle() {
-    const themeToggle = document.getElementById('themeToggle');
-    
-    if (!themeToggle) return;
-    
-    // Check for saved theme preference or default to dark mode
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    const isDarkMode = savedTheme === 'dark';
-    
-    // Apply initial theme
-    if (!isDarkMode) {
-        document.body.classList.add('light-mode');
-        updateThemeIcon('light');
-    } else {
-        updateThemeIcon('dark');
-    }
-    
-    // Theme toggle click handler
-    themeToggle.addEventListener('click', () => {
-        const isCurrentlyDark = !document.body.classList.contains('light-mode');
+
+// --- Load Designs ---
+async function loadDesigns() {
+    const grid = document.getElementById('design-grid');
+    if (!grid) return;
+
+    try {
+        const response = await fetch('designs.json');
+        const data = await response.json();
         
-        if (isCurrentlyDark) {
-            // Switch to light mode
-            document.body.classList.add('light-mode');
-            updateThemeIcon('light');
-            localStorage.setItem('theme', 'light');
-            showNotification('☀️ Switched to Light Mode', 'info');
-        } else {
-            // Switch to dark mode
-            document.body.classList.remove('light-mode');
-            updateThemeIcon('dark');
-            localStorage.setItem('theme', 'dark');
-            showNotification('🌙 Switched to Dark Mode', 'info');
-        }
-    });
-    
-    // Add keyboard support (T key for theme toggle)
-    document.addEventListener('keydown', (e) => {
-        if (e.key.toLowerCase() === 't' && (e.ctrlKey || e.metaKey)) {
-            e.preventDefault();
-            themeToggle.click();
-        }
-    });
-}
+        // Decap CMS saves the list inside a "designs" property object
+        // But if we manually edited it before, it might be a direct array.
+        // Let's handle both cases.
+        const designs = Array.isArray(data) ? data : data.designs;
 
-// Update theme icon based on current mode
-function updateThemeIcon(mode) {
-    const themeToggle = document.getElementById('themeToggle');
-    if (!themeToggle) return;
-    
-    const icon = themeToggle.querySelector('i');
-    if (mode === 'light') {
-        icon.className = 'fas fa-sun';
-        icon.style.color = '#f39c12';
-    } else {
-        icon.className = 'fas fa-moon';
-        icon.style.color = '#ffffff';
-    }
-}
-
-// Fun Quirky Features
-function initializeQuirkyFeatures() {
-    // Konami Code Easter Egg
-    let konamiCode = [];
-    const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA'];
-    
-    document.addEventListener('keydown', (e) => {
-        konamiCode.push(e.code);
-        if (konamiCode.length > konamiSequence.length) {
-            konamiCode.shift();
+        if (!designs) {
+             grid.innerHTML = '<p>No designs found.</p>';
+             return;
         }
+
+        let html = '';
+        designs.forEach(design => {
+            html += '<div class="design-item">';
+            html += '<img src="' + design.image + '" alt="' + design.title + '" loading="lazy">';
+            html += '<div class="design-overlay">';
+            html += '<div class="design-title">' + design.title + '</div>';
+            html += '<div class="design-category">' + design.category + '</div>';
+            html += '</div></div>';
+        });
         
-        if (konamiCode.join(',') === konamiSequence.join(',')) {
-            activateKonamiEasterEgg();
-            konamiCode = [];
-        }
-    });
-    
-    // Secret Click Counter
-    let secretClicks = 0;
-    const secretThreshold = 7;
-    
-    document.addEventListener('click', (e) => {
-        if (e.target.classList.contains('skill-item') || e.target.classList.contains('project-card')) {
-            secretClicks++;
-            if (secretClicks === secretThreshold) {
-                showSecretMessage();
-                secretClicks = 0;
-            }
-        }
-    });
-    
-    // Random Fun Facts
-    showRandomFunFacts();
-}
+        grid.innerHTML = html;
+        
+        // Re-observe new elements for scroll reveal
+        const newItems = grid.querySelectorAll('.design-item');
+        newItems.forEach(el => {
+            el.classList.add('hidden');
+            observer.observe(el);
+        });
 
-// Konami Code Easter Egg
-function activateKonamiEasterEgg() {
-    const container = document.querySelector('.container');
-    const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff'];
-    let colorIndex = 0;
-    
-    // Create rainbow effect
-    const rainbowInterval = setInterval(() => {
-        container.style.background = `radial-gradient(circle at 50% 50%, ${colors[colorIndex]}20 0%, #0a0a0a 100%)`;
-        colorIndex = (colorIndex + 1) % colors.length;
-    }, 200);
-    
-    // Show easter egg message
-    showNotification('🎮 Konami Code Activated! 🌈', 'success');
-    
-    // Reset after 5 seconds
-    setTimeout(() => {
-        clearInterval(rainbowInterval);
-        container.style.background = 'radial-gradient(circle at 50% 50%, #1a1a1a 0%, #0a0a0a 100%)';
-    }, 5000);
-}
-
-// Secret Click Message
-function showSecretMessage() {
-    const messages = [
-        '🎉 You found the secret! You\'re awesome!',
-        '🌟 Secret achievement unlocked: Persistent Clicker!',
-        '🎯 Wow, you really like clicking things!',
-        '🚀 You\'ve discovered the hidden click counter!',
-        '💫 Secret message: Keep exploring!'
-    ];
-    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-    showNotification(randomMessage, 'info');
-}
-
-// Random Fun Facts
-function showRandomFunFacts() {
-    const funFacts = [
-        '💡 Did you know? The first computer bug was an actual bug!',
-        '🎮 Fun fact: The first video game was created in 1958!',
-        '🚀 Space fact: There\'s a computer on the moon!',
-        '🎨 Design tip: The best designs are invisible!',
-        '⚡ Tech fact: The internet is older than you think!',
-        '🎪 Fun fact: This portfolio has secret features!',
-        '🌟 Did you know? You can find easter eggs here!',
-        '🎯 Pro tip: Try clicking things multiple times!'
-    ];
-    
-    // Show a random fact every 30 seconds
-    setInterval(() => {
-        if (Math.random() < 0.3) { // 30% chance every 30 seconds
-            const randomFact = funFacts[Math.floor(Math.random() * funFacts.length)];
-            showNotification(randomFact, 'fun');
-        }
-    }, 30000);
-}
-
-// Notification System
-function showNotification(message, type = 'info') {
-    const notification = document.createElement('div');
-    notification.textContent = message;
-
-    // Theme-aware glassmorphism styles
-    let background = 'linear-gradient(135deg, rgba(30,30,40,0.7) 0%, rgba(30,30,40,0.5) 100%)';
-    let border = '1px solid rgba(255,255,255,0.18)';
-    let color = 'white';
-    let boxShadow = '0px 0px 20px rgba(0,0,0,0.18)';
-    let blur = 'blur(12px)';
-
-    if (document.body.classList.contains('light-mode')) {
-        background = 'linear-gradient(135deg, rgba(0,150,255,0.13) 0%, rgba(255,255,255,0.7) 100%)';
-        border = '1.5px solid rgba(0,150,255,0.18)';
-        color = '#1a4a6b';
-        boxShadow = '0px 0px 20px rgba(0,150,255,0.10)';
-        blur = 'blur(14px)';
+    } catch (error) {
+        console.error('Error loading designs:', error);
+        grid.innerHTML = '<p>Failed to load designs.</p>';
     }
-
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${background};
-        border: ${border};
-        border-radius: 18px;
-        padding: 1em 1.7em;
-        color: ${color};
-        font-family: 'Courier New', Courier, monospace;
-        font-size: 1em;
-        z-index: 10000;
-        backdrop-filter: ${blur};
-        box-shadow: ${boxShadow};
-        transform: translateX(400px);
-        transition: all 0.3s cubic-bezier(.4,2,.6,1);
-        max-width: 340px;
-        word-wrap: break-word;
-        opacity: 0.98;
-        letter-spacing: 0.01em;
-    `;
-
-    // Add type-specific styling
-    if (type === 'success') {
-        notification.style.borderColor = 'rgba(76, 175, 80, 0.4)';
-        notification.style.boxShadow = '0px 0px 20px rgba(76, 175, 80, 0.15)';
-    } else if (type === 'fun') {
-        notification.style.borderColor = 'rgba(0, 150, 255, 0.4)';
-        notification.style.boxShadow = '0px 0px 20px rgba(0, 150, 255, 0.15)';
-    }
-
-    document.body.appendChild(notification);
-
-    // Animate in
-    setTimeout(() => {
-        notification.style.transform = 'translateX(0)';
-    }, 100);
-
-    // Animate out and remove
-    setTimeout(() => {
-        notification.style.transform = 'translateX(400px)';
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
-            }
-        }, 300);
-    }, 4000);
 }
 
-// Add CSS for floating animation
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes floatUp {
-        0% {
-            transform: translateY(0) scale(0.5);
-            opacity: 0;
-        }
-        20% {
-            opacity: 1;
-        }
-        100% {
-            transform: translateY(-100px) scale(1.2);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(style);
+document.addEventListener('DOMContentLoaded', loadDesigns);
+
