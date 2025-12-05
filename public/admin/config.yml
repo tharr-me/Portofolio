@@ -3,8 +3,8 @@ backend:
   repo: tharr-me/Portofolio
   branch: main
 
-media_folder: "assets/designs"
-public_folder: "assets/designs"
+media_folder: "public/assets/designs"
+public_folder: "/assets/designs"
 
 collections:
   - name: "designs"
@@ -12,7 +12,7 @@ collections:
     files:
       - name: "all_designs"
         label: "All Designs"
-        file: "designs.json"
+        file: "public/designs.json"
         description: "List of all graphic designs"
         fields:
           - name: "designs"
