@@ -4,6 +4,9 @@ import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
 const cursorDot = document.querySelector('[data-cursor-dot]');
 const cursorOutline = document.querySelector('[data-cursor-outline]');
 
+// Hide default cursor only when JS is running
+document.body.style.cursor = 'none';
+
 window.addEventListener('mousemove', (e) => {
     const posX = e.clientX;
     const posY = e.clientY;
@@ -159,15 +162,19 @@ window.addEventListener('resize', () => {
 });
 
 // --- Preloader ---
-window.addEventListener('load', () => {
+function hidePreloader() {
     const preloader = document.getElementById('preloader');
-    setTimeout(() => {
+    if (preloader) {
         preloader.style.opacity = '0';
         setTimeout(() => {
             preloader.style.display = 'none';
         }, 500);
-    }, 2000); // Wait for 2s animation
-});
+    }
+}
+
+// Hide on load, or fallback after 3 seconds
+window.addEventListener('load', hidePreloader);
+setTimeout(hidePreloader, 3000); // Fallback
 
 // --- Scroll Reveal ---
 const observerOptions = {
@@ -258,5 +265,10 @@ async function loadDesigns() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', loadDesigns);
+// Run immediately if DOM is ready, otherwise wait
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadDesigns);
+} else {
+    loadDesigns();
+}
 
