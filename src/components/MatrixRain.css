@@ -1,0 +1,19 @@
+.matrix-rain {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+body.matrix-mode .matrix-rain {
+    opacity: 0.5;
+}
+
+body.matrix-mode canvas[style*="opacity: 0.6"] {
+    opacity: 0 !important;
+}

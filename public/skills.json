@@ -1,0 +1,16 @@
+{
+    "categories": [
+        {
+            "name": "LANGUAGES",
+            "skills": ["Python", "JavaScript", "HTML5", "CSS3", "Shell"]
+        },
+        {
+            "name": "FRAMEWORKS",
+            "skills": ["React Native", "Node.js", "Flutter", "Ren'Py"]
+        },
+        {
+            "name": "TOOLS",
+            "skills": ["Git", "Docker", "AWS", "Linux", "Figma"]
+        }
+    ]
+}

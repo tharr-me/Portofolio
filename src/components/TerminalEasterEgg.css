@@ -1,0 +1,178 @@
+.terminal-easter-egg {
+    position: fixed;
+    bottom: 6rem;
+    right: 2rem;
+    width: 600px;
+    max-width: calc(100vw - 4rem);
+    height: 400px;
+    background: rgba(0, 0, 0, 0.95);
+    border: 1px solid #333;
+    border-radius: 8px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.terminal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: rgba(20, 20, 20, 0.8);
+    border-bottom: 1px solid #333;
+    border-radius: 8px 8px 0 0;
+}
+
+.terminal-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.terminal-hint {
+    font-size: 0.7rem;
+    color: #888;
+}
+
+.terminal-close {
+    background: transparent;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    font-size: 1rem;
+    transition: color 0.2s;
+}
+
+.terminal-close:hover {
+    color: #fff;
+}
+
+.terminal-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    line-height: 1.6;
+}
+
+.terminal-line {
+    margin-bottom: 0.5rem;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.terminal-input {
+    color: #0f0;
+}
+
+.terminal-output {
+    color: #aaa;
+}
+
+.terminal-error {
+    color: #ff6b6b;
+}
+
+.terminal-ai-response {
+    color: #00ffff;
+    padding: 0.5rem 0;
+    line-height: 1.5;
+}
+
+.terminal-ai-thinking {
+    color: #ffff00;
+    animation: pulse 1s ease-in-out infinite;
+}
+
+.terminal-ai-hint {
+    color: #888;
+    font-style: italic;
+    font-size: 0.8rem;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.terminal-input-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: rgba(10, 10, 10, 0.8);
+    border-top: 1px solid #333;
+    border-radius: 0 0 8px 8px;
+}
+
+.terminal-prompt {
+    color: #0f0;
+    margin-right: 0.5rem;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+}
+
+.terminal-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+}
+
+.terminal-input::placeholder {
+    color: #555;
+}
+
+.terminal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.terminal-content::-webkit-scrollbar-track {
+    background: rgba(20, 20, 20, 0.5);
+}
+
+.terminal-content::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 4px;
+}
+
+.terminal-content::-webkit-scrollbar-thumb:hover {
+    background: #444;
+}
+
+@media (max-width: 768px) {
+    .terminal-easter-egg {
+        bottom: 1rem;
+        right: 1rem;
+        left: 1rem;
+        width: auto;
+        max-width: none;
+        height: 350px;
+    }
+
+    .terminal-hint {
+        display: none;
+    }
+}

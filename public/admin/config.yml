@@ -3,17 +3,37 @@ backend:
   repo: tharr-me/Portofolio
   branch: main
 
-media_folder: "public/assets/designs"
-public_folder: "/assets/designs"
+media_folder: "public/assets"
+public_folder: "/assets"
 
 collections:
+  - name: "projects"
+    label: "Projects"
+    files:
+      - name: "all_projects"
+        label: "All Projects"
+        file: "public/projects.json"
+        description: "Manage your portfolio projects"
+        fields:
+          - name: "projects"
+            label: "Projects"
+            widget: "list"
+            fields:
+              - {label: "ID", name: "id", widget: "number"}
+              - {label: "Title", name: "title", widget: "string"}
+              - {label: "Icon", name: "icon", widget: "string", hint: "FontAwesome icon class (e.g., fab fa-youtube)"}
+              - {label: "Description", name: "description", widget: "text"}
+              - {label: "Technologies", name: "technologies", widget: "list"}
+              - {label: "Tech Icons", name: "techIcons", widget: "list", required: false, hint: "FontAwesome classes for tech"}
+              - {label: "GitHub Link", name: "link", widget: "string"}
+
   - name: "designs"
     label: "Designs"
     files:
       - name: "all_designs"
         label: "All Designs"
         file: "public/designs.json"
-        description: "List of all graphic designs"
+        description: "Manage your graphic design work"
         fields:
           - name: "designs"
             label: "Design List"
@@ -22,3 +42,40 @@ collections:
               - {label: "Title", name: "title", widget: "string"}
               - {label: "Category", name: "category", widget: "select", options: ["Branding", "UI/UX", "Print", "Social Media", "Illustration"]}
               - {label: "Image", name: "image", widget: "image"}
+
+  - name: "skills"
+    label: "Skills"
+    files:
+      - name: "all_skills"
+        label: "Tech Stack"
+        file: "public/skills.json"
+        description: "Manage your technical skills"
+        fields:
+          - name: "categories"
+            label: "Skill Categories"
+            widget: "list"
+            fields:
+              - {label: "Category Name", name: "name", widget: "string"}
+              - {label: "Skills", name: "skills", widget: "list"}
+
+  - name: "settings"
+    label: "Settings"
+    files:
+      - name: "site_info"
+        label: "Site Information"
+        file: "public/site-info.json"
+        description: "Update your personal info"
+        fields:
+          - {label: "Name", name: "name", widget: "string", default: "THARMIKAN"}
+          - {label: "Tagline", name: "tagline", widget: "string", default: "SOFTWARE_ENGINEERING"}
+          - {label: "Email", name: "email", widget: "string"}
+          - {label: "GitHub", name: "github", widget: "string"}
+          - {label: "LinkedIn", name: "linkedin", widget: "string"}
+          - label: "Typewriter Phrases"
+            name: "typewriterPhrases"
+            widget: "list"
+            default: ["Building digital experiences.", "Crafting clean code.", "Exploring new technologies.", "Minimalist design enthusiast."]
+          - label: "About"
+            name: "about"
+            widget: "list"
+            default: ["THARMIKAN - Full Stack Developer", "Passionate about creating digital experiences", "Minimalist design enthusiast", "Always exploring new technologies"]

@@ -2,10 +2,12 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
 
 :root {
-    --bg-color: #050505;
+    --bg-color: #000000;
     --text-color: #e0e0e0;
-    --accent-color: #888;
+    --accent-color: #a0a0a0;
     --highlight-color: #fff;
+    --neon-color: #00ff00;
+    --neon-glow: 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 15px #00ff00;
     --font-mono: 'Space Mono', monospace;
     --cursor-size: 20px;
 }
@@ -18,7 +20,7 @@ html {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    /* cursor: none; Removed to prevent invisible cursor if JS fails */
+    cursor: none;
 }
 
 body {
@@ -27,6 +29,49 @@ body {
     font-family: var(--font-mono);
     overflow-x: hidden;
     line-height: 1.6;
+    position: relative;
+}
+
+/* Scanline overlay effect */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 255, 0, 0.03) 0px,
+        transparent 1px,
+        transparent 2px,
+        rgba(0, 255, 0, 0.03) 3px
+    );
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.3;
+    animation: scanlines 0.1s linear infinite;
+}
+
+@keyframes scanlines {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(4px); }
+}
+
+/* Skip Link for Accessibility */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--highlight-color);
+    color: var(--bg-color);
+    padding: 8px;
+    text-decoration: none;
+    z-index: 10001;
+}
+
+.skip-link:focus {
+    top: 0;
 }
 
 /* Custom Cursor */
@@ -138,11 +183,32 @@ nav a {
     padding-bottom: 1rem;
     display: inline-block;
     letter-spacing: -1px;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
 }
 
 .section-title i {
     margin-right: 10px;
     font-size: 1.2rem;
+    color: var(--neon-color);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
 }
 
 /* Hero */
@@ -166,6 +232,20 @@ h1.glitch {
     position: relative;
     letter-spacing: -4px;
     line-height: 1;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    animation: textGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes textGlow {
+    from {
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5),
+                     0 0 20px rgba(255, 255, 255, 0.3);
+    }
+    to {
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.8),
+                     0 0 30px rgba(255, 255, 255, 0.5),
+                     0 0 40px rgba(255, 255, 255, 0.3);
+    }
 }
 
 /* Terminal Box */
@@ -232,8 +312,29 @@ h1.glitch {
     z-index: -1;
 }
 
+.btn-minimal::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(0, 255, 0, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn-minimal:hover::after {
+    width: 300px;
+    height: 300px;
+}
+
 .btn-minimal:hover {
     color: var(--bg-color);
+    border-color: var(--neon-color);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+    transform: translateY(-2px);
 }
 
 .btn-minimal:hover::before {
@@ -250,7 +351,7 @@ h1.glitch {
 .project-item {
     border: 1px solid #222;
     padding: 2.5rem;
-    transition: all 0.4s ease;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -258,12 +359,30 @@ h1.glitch {
     backdrop-filter: blur(10px);
     position: relative;
     top: 0;
+    overflow: hidden;
+}
+
+.project-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+.project-item:hover::before {
+    left: 100%;
 }
 
 .project-item:hover {
-    border-color: var(--text-color);
-    transform: translateY(-10px);
+    border-color: var(--neon-color);
+    transform: translateY(-10px) scale(1.02);
     background: rgba(20, 20, 20, 0.8);
+    box-shadow: 0 10px 40px rgba(0, 255, 0, 0.2),
+                0 0 20px rgba(0, 255, 0, 0.1);
 }
 
 .project-info h3 {
@@ -393,6 +512,10 @@ footer {
         padding: 1.5rem 0;
     }
 
+    .desktop-nav {
+        display: none;
+    }
+
     .section {
         padding: 2.5rem 0;
         min-height: auto;
@@ -405,10 +528,6 @@ footer {
     .contact-big {
         font-size: 1.2rem;
         gap: 10px;
-    }
-
-    .nav ul {
-        display: none; 
     }
     
     .cursor-dot, .cursor-outline {
@@ -475,18 +594,34 @@ footer {
 
 /* Glitch Animation */
 @keyframes glitch {
-    0% { transform: translate(0) }
-    20% { transform: translate(-2px, 2px) }
-    40% { transform: translate(-2px, -2px) }
-    60% { transform: translate(2px, 2px) }
-    80% { transform: translate(2px, -2px) }
-    100% { transform: translate(0) }
+    0% { 
+        transform: translate(0);
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+    20% { 
+        transform: translate(-2px, 2px);
+        text-shadow: 2px 0 var(--neon-color), -2px 0 #ff00ff;
+    }
+    40% { 
+        transform: translate(-2px, -2px);
+        text-shadow: -2px 0 var(--neon-color), 2px 0 #ff00ff;
+    }
+    60% { 
+        transform: translate(2px, 2px);
+        text-shadow: 0 2px var(--neon-color), 0 -2px #ff00ff;
+    }
+    80% { 
+        transform: translate(2px, -2px);
+        text-shadow: 0 -2px var(--neon-color), 0 2px #ff00ff;
+    }
+    100% { 
+        transform: translate(0);
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
 }
 
 .glitch:hover {
     animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
-    color: var(--highlight-color);
-    text-shadow: 2px 2px var(--accent-color);
 }
 
 /* Preloader */

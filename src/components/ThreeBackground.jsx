@@ -1,16 +1,25 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 
 const ThreeBackground = () => {
     const containerRef = useRef(null);
+    const [webGLSupported, setWebGLSupported] = useState(true);
 
     useEffect(() => {
+        // Check WebGL support
+        const canvas = document.createElement('canvas');
+        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+        if (!gl) {
+            setWebGLSupported(false);
+            return;
+        }
+
         if (!containerRef.current) return;
 
         // Scene Setup
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x050505);
-        scene.fog = new THREE.FogExp2(0x050505, 0.002);
+        scene.background = new THREE.Color(0x000000);
+        scene.fog = new THREE.FogExp2(0x000000, 0.002);
 
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.position.z = 5;
@@ -93,6 +102,7 @@ const ThreeBackground = () => {
             window.removeEventListener('resize', handleResize);
             cancelAnimationFrame(animationId);
             
+            // Properly dispose all resources
             if (containerRef.current && renderer.domElement) {
                 containerRef.current.removeChild(renderer.domElement);
             }
@@ -100,8 +110,16 @@ const ThreeBackground = () => {
             geometry.dispose();
             material.dispose();
             renderer.dispose();
+            renderer.forceContextLoss();
+            scene.clear();
         };
     }, []);
+
+    if (!webGLSupported) {
+        return (
+            <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1, background: 'radial-gradient(circle at 50% 50%, #0a0a0a, #000000)', opacity: 0.6 }} />
+        );
+    }
 
     return <div ref={containerRef} className="canvas-container" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1, opacity: 0.6 }} />;
 };
