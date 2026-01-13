@@ -1,0 +1,39 @@
+{
+    "projects": [
+        {
+            "id": 1,
+            "title": "VideoProcessor",
+            "icon": "fab fa-youtube",
+            "description": "Automated video content creation tool.",
+            "technologies": ["Python", "YouTube API"],
+            "link": "https://github.com/tharr-me/VideoProcessor"
+        },
+        {
+            "id": 2,
+            "title": "ClothSwap",
+            "icon": "fas fa-tshirt",
+            "description": "Clothing exchange platform.",
+            "technologies": ["Python", "Web"],
+            "techIcons": ["fab fa-python", "fas fa-globe"],
+            "link": "https://github.com/tharr-me/ClothSwap"
+        },
+        {
+            "id": 3,
+            "title": "SwapApi",
+            "icon": "fas fa-server",
+            "description": "RESTful API for exchange platforms.",
+            "technologies": ["Python", "REST API"],
+            "techIcons": ["fab fa-python", "fas fa-network-wired"],
+            "link": "https://github.com/tharr-me/SwapApi"
+        },
+        {
+            "id": 4,
+            "title": "Custom ROM Builder",
+            "icon": "fab fa-android",
+            "description": "Android ROM automation tool.",
+            "technologies": ["Shell", "Android"],
+            "techIcons": ["fas fa-terminal", "fab fa-android"],
+            "link": "https://github.com/tharr-me/Custom-Rom-Builder-For-Samsung-Galaxy-SDM439-SDM450"
+        }
+    ]
+}

@@ -1,0 +1,24 @@
+backend:
+  name: github
+  repo: tharr-me/Portofolio
+  branch: main
+
+media_folder: "public/assets/designs"
+public_folder: "/assets/designs"
+
+collections:
+  - name: "designs"
+    label: "Designs"
+    files:
+      - name: "all_designs"
+        label: "All Designs"
+        file: "public/designs.json"
+        description: "List of all graphic designs"
+        fields:
+          - name: "designs"
+            label: "Design List"
+            widget: "list"
+            fields:
+              - {label: "Title", name: "title", widget: "string"}
+              - {label: "Category", name: "category", widget: "select", options: ["Branding", "UI/UX", "Print", "Social Media", "Illustration"]}
+              - {label: "Image", name: "image", widget: "image"}
